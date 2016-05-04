@@ -24,7 +24,7 @@ MessageId=0x1
 Severity=Error
 Facility=System
 SymbolicName=MSG_ERROR
-Langauge=English
+Language=English
 %1
 .
 

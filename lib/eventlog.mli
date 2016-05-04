@@ -35,3 +35,4 @@ ReportEvent API documentation}
 }
 *)
 
+val log_something: string -> unit

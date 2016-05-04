@@ -17,4 +17,4 @@
 
 let _ =
   (* Log one message *)
-  failwith "unimplemented"
+  Eventlog.log_something "foo"

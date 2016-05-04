@@ -14,9 +14,35 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <windows.h>
+#include <stdio.h>
+
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/alloc.h>
 #include <caml/custom.h>
 #include <caml/fail.h>
 #include <caml/threads.h>
+
+#define NETWORK_CATEGORY ((WORD)0x00000001L)
+
+
+CAMLprim value stub_log_something(value message) {
+  CAMLparam1(message);
+
+  HANDLE hEventLog = NULL;
+  LPSTR pInsertStrings[2] = {NULL, NULL};
+  int id = 1;
+  pInsertStrings[0] = strdup(String_val(message));
+  hEventLog = RegisterEventSource(NULL, "EventLogMessages.dll");
+  if (!hEventLog) {
+    fprintf(stderr, "Failed to RES with GLE=%ld\n", GetLastError());
+    goto err;
+  }
+  if (!ReportEvent(hEventLog, EVENTLOG_ERROR_TYPE, NETWORK_CATEGORY, id, NULL, 1, 0, pInsertStrings, NULL)) {
+    fprintf(stderr, "Failed with GLE=%ld\n", GetLastError());
+  }
+err:
+  free(pInsertStrings[0]);
+  CAMLreturn(0);
+}

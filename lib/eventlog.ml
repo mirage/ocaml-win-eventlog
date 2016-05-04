@@ -14,3 +14,5 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
  *)
+
+external log_something: string -> unit = "stub_log_something"

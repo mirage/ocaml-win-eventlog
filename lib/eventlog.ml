@@ -15,4 +15,23 @@
  *
  *)
 
+type severity = [
+  | `Warning
+  | `Success
+  | `Informational
+  | `Error
+]
+
+type c_severity =
+  | Success       (* = 00 *)
+  | Informational (* = 01 *)
+  | Warning       (* = 10 *)
+  | Error         (* = 11 *)
+
+let c_severity_of = function
+  | `Warning -> Warning
+  | `Success -> Success
+  | `Informational -> Informational
+  | `Error -> Error
+
 external log_something: string -> unit = "stub_log_something"

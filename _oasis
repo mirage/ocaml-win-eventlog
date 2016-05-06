@@ -11,7 +11,7 @@ Plugins:      DevFiles (0.3), META (0.3)
 Library               eventlog
   Path:               lib
   Modules:            Eventlog, Log_eventlog
-  BuildDepends:       result, logs
+  BuildDepends:       result, logs, unix
   Findlibname:        eventlog 
   CSources:           eventlog_stubs.c
 

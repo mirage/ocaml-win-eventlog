@@ -13,7 +13,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 
@@ -23,6 +23,7 @@
 #include <caml/custom.h>
 #include <caml/fail.h>
 #include <caml/threads.h>
+#include <caml/unixsupport.h>
 
 #define NETWORK_CATEGORY ((WORD)0x00000001L)
 
@@ -34,9 +35,11 @@ CAMLprim value stub_log_something(value message) {
   LPSTR pInsertStrings[2] = {NULL, NULL};
   int id = 1;
   pInsertStrings[0] = strdup(String_val(message));
-  hEventLog = RegisterEventSource(NULL, "EventLogMessages.dll");
+  hEventLog = RegisterEventSource(NULL, "OcamlEventLog.dll");
   if (!hEventLog) {
-    fprintf(stderr, "Failed to RES with GLE=%ld\n", GetLastError());
+    DWORD err = GetLastError();
+    win32_maperr(err);
+    uerror("RegisterEventSource", Nothing);
     goto err;
   }
   if (!ReportEvent(hEventLog, EVENTLOG_ERROR_TYPE, NETWORK_CATEGORY, id, NULL, 1, 0, pInsertStrings, NULL)) {

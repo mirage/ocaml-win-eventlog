@@ -35,12 +35,30 @@ ReportEvent API documentation}
 }
 *)
 
-type handle
+type t
 (** An event log handle, see [register] *)
 
-val register: ?server:string -> string -> handle
+val register: ?server:string -> string -> t
 (** [register server source] registers the source named [source] with the
     event log on server [server]. If [server] is None then the local event
     log is used. *)
+
+type ty = [
+  | `Success
+  | `Audit_failure
+  | `Audit_success
+  | `Error
+  | `Information
+  | `Warning
+]
+(** Type of event to be logged *)
+
+val report: t -> ty -> int -> int -> string array -> unit
+(** [report t ty category event strings] reports an event to the log [t]. The
+    event has a global "type", as well as source-specific category and event ids.
+    Each event takes an array of "insertion strings" -- the system log viewer
+    will look up the category, event and user's language setting in the resource
+    (.exe or .dll) associated with the event source in the registrty, and then
+    "insert" the strings as parameters inside the template. *)
 
 val log_something: string -> unit

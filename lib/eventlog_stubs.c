@@ -42,6 +42,19 @@ HANDLE RegisterEventSource(LPCTSTR lpUNCServerName, LPCTSTR lpSourceName){
 void win32_maperr(DWORD err){
   return;
 }
+#define WORD int
+#define PSID void*
+#define LPVOID void*
+BOOL ReportEvent(HANDLE hEventLog, WORD wType, WORD wCategory, DWORD dwEventID,
+  PSID lpUserSid, WORD wNumStrings, DWORD dwDataSize, LPCTSTR *lpStrings, LPVOID lpRawData
+){
+  fprintf(stderr, "ReportEvent type=%d category=%d eventid=%d numstrings=%d\n",
+    wType, wCategory, dwEventID, wNumStrings);
+  for (int i = 0; i < wNumStrings; i ++) {
+    fprintf(stderr, "%d: %s\n", i, *(lpStrings + i));
+  }
+  return TRUE;
+}
 #endif
 
 #include <caml/mlvalues.h>
@@ -97,6 +110,34 @@ CAMLprim value stub_register_event_source(value server_opt, value source) {
     uerror("RegisterEventSource", Nothing);
   }
   CAMLreturn(alloc_eventlog(h));
+}
+
+CAMLprim value stub_report_event(value eventlog, value type, value category, value event, value strings) {
+  CAMLparam5(eventlog, type, category, event, strings);
+  HANDLE hEventLog = Eventlog_val(eventlog);
+  WORD wType = Int_val(type);
+  WORD wCategory = Int_val(category);
+  DWORD dwEventID = Int_val(event);
+  WORD wNumStrings = Wosize_val(strings);
+  LPCTSTR *lpStrings = malloc(wNumStrings * sizeof(char *));
+  for (int i = 0; i < wNumStrings; i++){
+    lpStrings[i] = strdup(String_val(Field(strings, i)));
+  }
+  BOOL result = ReportEvent(hEventLog, wType, wCategory, dwEventID, NULL,
+    wNumStrings, 0, lpStrings, NULL);
+  DWORD error = 0;
+  if (!result){
+    error = GetLastError();
+  }
+  for (int i = 0; i < wNumStrings; i++){
+    free(lpStrings[i]);
+  }
+  free(lpStrings);
+  if (!result) {
+    win32_maperr(error);
+    uerror("ReportEvent", Nothing);
+  }
+  CAMLreturn(Val_unit);
 }
 
 CAMLprim value stub_log_something(value message) {

@@ -16,5 +16,14 @@
  *)
 
 let _ =
-  (* Log one message *)
-  Eventlog.log_something "foo"
+  let h = Eventlog.register "Docker.exe" in
+  List.iter (fun ty ->
+    List.iter (fun category ->
+      List.iter (fun event ->
+        Eventlog.report h ty category event [|
+          Printf.sprintf "This should have type %s with category %d and event id %d"
+            (Eventlog.string_of_ty ty) category event
+        |]
+      ) [ 3; 4; 5 ]
+    ) [ 0; 1; 2 ]
+  ) [ `Success; `Audit_failure; `Audit_success; `Error; `Information; `Warning ]

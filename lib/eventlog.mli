@@ -53,6 +53,8 @@ type ty = [
 ]
 (** Type of event to be logged *)
 
+val string_of_ty: ty -> string
+
 val report: t -> ty -> int -> int -> string array -> unit
 (** [report t ty category event strings] reports an event to the log [t]. The
     event has a global "type", as well as source-specific category and event ids.

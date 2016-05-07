@@ -39,6 +39,14 @@ let int_of_ty = function
   | `Information   -> 0x0004
   | `Warning       -> 0x0002
 
+let string_of_ty = function
+  | `Success       -> "EVENTLOG_SUCCESS"
+  | `Audit_failure -> "EVENTLOG_AUDIT_FAILURE"
+  | `Audit_success -> "EVENTLOG_AUDIT_SUCCESS"
+  | `Error         -> "EVENTLOG_ERROR_TYPE"
+  | `Information   -> "EVENTLOG_INFORMATION_TYPE"
+  | `Warning       -> "EVENTLOG_WARNING_TYPE"
+
 external reportEvent: t -> int -> int -> int -> string array -> unit = "stub_report_event"
 
 let report t ty category event strings =

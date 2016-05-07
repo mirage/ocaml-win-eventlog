@@ -100,10 +100,14 @@ CAMLprim value stub_register_event_source(value server_opt, value source) {
     lpUNCServerName = strdup(String_val(Field(server_opt, 1)));
   }
   lpSourceName = strdup(String_val(source));
+
+  caml_release_runtime_system();
   h = RegisterEventSource(lpUNCServerName, lpSourceName);
   if (h == NULL) {
     error = GetLastError();
   }
+  caml_acquire_runtime_system();
+
   free((void*)lpUNCServerName);
   free((void*)lpSourceName);
   if (h == NULL) {
@@ -125,12 +129,16 @@ CAMLprim value stub_report_event(value eventlog, value type, value category, val
   for (i = 0; i < wNumStrings; i++){
     lpStrings[i] = strdup(String_val(Field(strings, i)));
   }
+
+  caml_release_runtime_system();
   BOOL result = ReportEvent(hEventLog, wType, wCategory, dwEventID, NULL,
     wNumStrings, 0, lpStrings, NULL);
   DWORD error = 0;
   if (!result){
     error = GetLastError();
   }
+  caml_acquire_runtime_system();
+
   for (i = 0; i < wNumStrings; i++){
     free((void*)(lpStrings[i]));
   }

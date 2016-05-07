@@ -13,8 +13,11 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
+#ifdef WIN32
 #include <winsock2.h>
 #include <windows.h>
+#endif
+
 #include <stdio.h>
 
 #include <caml/mlvalues.h>
@@ -25,12 +28,11 @@
 #include <caml/threads.h>
 #include <caml/unixsupport.h>
 
-#define NETWORK_CATEGORY ((WORD)0x00000001L)
-
 
 CAMLprim value stub_log_something(value message) {
   CAMLparam1(message);
 
+#ifdef WIN32
   HANDLE hEventLog = NULL;
   LPSTR pInsertStrings[2] = {NULL, NULL};
   int id = 1;
@@ -42,10 +44,14 @@ CAMLprim value stub_log_something(value message) {
     uerror("RegisterEventSource", Nothing);
     goto err;
   }
-  if (!ReportEvent(hEventLog, EVENTLOG_ERROR_TYPE, NETWORK_CATEGORY, id, NULL, 1, 0, pInsertStrings, NULL)) {
+  WORD category = (WORD)0x00000001L;
+  if (!ReportEvent(hEventLog, EVENTLOG_ERROR_TYPE, category, id, NULL, 1, 0, pInsertStrings, NULL)) {
     fprintf(stderr, "Failed with GLE=%ld\n", GetLastError());
   }
 err:
   free(pInsertStrings[0]);
+#else
+  caml_failwith("Windows eventlog not available on this platform");
+#endif
   CAMLreturn(0);
 }

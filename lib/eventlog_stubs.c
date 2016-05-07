@@ -95,7 +95,7 @@ CAMLprim value stub_register_event_source(value server_opt, value source) {
   LPCTSTR lpSourceName = NULL;
   DWORD error = 0;
   HANDLE h = NULL;
-  if (Field(server_opt, 0) == Val_Some) {
+  if (Int_val(server_opt) == Val_Some) {
     lpUNCServerName = strdup(String_val(Field(server_opt, 1)));
   }
   lpSourceName = strdup(String_val(source));

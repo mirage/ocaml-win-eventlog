@@ -50,7 +50,8 @@ BOOL ReportEvent(HANDLE hEventLog, WORD wType, WORD wCategory, DWORD dwEventID,
 ){
   fprintf(stderr, "ReportEvent type=%d category=%d eventid=%d numstrings=%d\n",
     wType, wCategory, dwEventID, wNumStrings);
-  for (int i = 0; i < wNumStrings; i ++) {
+  int i = 0;
+  for (i = 0; i < wNumStrings; i ++) {
     fprintf(stderr, "%d: %s\n", i, *(lpStrings + i));
   }
   return TRUE;
@@ -103,8 +104,8 @@ CAMLprim value stub_register_event_source(value server_opt, value source) {
   if (h == NULL) {
     error = GetLastError();
   }
-  free(lpUNCServerName);
-  free(lpSourceName);
+  free((void*)lpUNCServerName);
+  free((void*)lpSourceName);
   if (h == NULL) {
     win32_maperr(error);
     uerror("RegisterEventSource", Nothing);
@@ -120,7 +121,8 @@ CAMLprim value stub_report_event(value eventlog, value type, value category, val
   DWORD dwEventID = Int_val(event);
   WORD wNumStrings = Wosize_val(strings);
   LPCTSTR *lpStrings = malloc(wNumStrings * sizeof(char *));
-  for (int i = 0; i < wNumStrings; i++){
+  int i = 0;
+  for (i = 0; i < wNumStrings; i++){
     lpStrings[i] = strdup(String_val(Field(strings, i)));
   }
   BOOL result = ReportEvent(hEventLog, wType, wCategory, dwEventID, NULL,
@@ -129,10 +131,10 @@ CAMLprim value stub_report_event(value eventlog, value type, value category, val
   if (!result){
     error = GetLastError();
   }
-  for (int i = 0; i < wNumStrings; i++){
-    free(lpStrings[i]);
+  for (i = 0; i < wNumStrings; i++){
+    free((void*)(lpStrings[i]));
   }
-  free(lpStrings);
+  free((void*)lpStrings);
   if (!result) {
     win32_maperr(error);
     uerror("ReportEvent", Nothing);

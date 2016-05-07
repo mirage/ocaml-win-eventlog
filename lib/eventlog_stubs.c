@@ -141,30 +141,3 @@ CAMLprim value stub_report_event(value eventlog, value type, value category, val
   }
   CAMLreturn(Val_unit);
 }
-
-CAMLprim value stub_log_something(value message) {
-  CAMLparam1(message);
-
-#ifdef WIN32
-  HANDLE hEventLog = NULL;
-  LPSTR pInsertStrings[2] = {NULL, NULL};
-  int id = 1;
-  pInsertStrings[0] = strdup(String_val(message));
-  hEventLog = RegisterEventSource(NULL, "OcamlEventLog.dll");
-  if (!hEventLog) {
-    DWORD err = GetLastError();
-    win32_maperr(err);
-    uerror("RegisterEventSource", Nothing);
-    goto err;
-  }
-  WORD category = (WORD)0x00000001L;
-  if (!ReportEvent(hEventLog, EVENTLOG_ERROR_TYPE, category, id, NULL, 1, 0, pInsertStrings, NULL)) {
-    fprintf(stderr, "Failed with GLE=%ld\n", GetLastError());
-  }
-err:
-  free(pInsertStrings[0]);
-#else
-  caml_failwith("Windows eventlog not available on this platform");
-#endif
-  CAMLreturn(0);
-}

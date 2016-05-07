@@ -91,5 +91,3 @@ val report: t -> ty -> int -> int -> string array -> unit
     will look up the category, event and user's language setting in the resource
     (.exe or .dll) associated with the event source in the registrty, and then
     "insert" the strings as parameters inside the template. *)
-
-val log_something: string -> unit

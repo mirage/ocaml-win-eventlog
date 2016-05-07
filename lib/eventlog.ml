@@ -51,5 +51,3 @@ external reportEvent: t -> int -> int -> int -> string array -> unit = "stub_rep
 
 let report t ty category event strings =
   reportEvent t (int_of_ty ty) category event strings
-
-external log_something: string -> unit = "stub_log_something"

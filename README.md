@@ -3,15 +3,28 @@ Bindings to the Windows event log
 
 This library allows you to log via the Windows event log from OCaml programs.
 
-A simple example:
+A low-level example:
 
 ```ocaml
-(* TODO: example *)
+let log = Eventlog.register "Mirage.exe" in
+let category = 0 and event = 1 in
+Eventlog.report log `Success category event [|
+  "insertion string 1";
+  "insertion string 2";
+|]
 ```
 
-For Windows developers
-----------------------
+You may wish to use the Log reporter interface instead:
 
-This is based on the [MSDN ReportError example](https://msdn.microsoft.com/en-us/library/aa363680(v=vs.85).aspx).
+```ocaml
+let log = Eventlog.register "Mirage.exe" in
+Logs.set_reporter (Log_eventlog.reporter log ());
 
-Please read [ReportError API](https://msdn.microsoft.com/en-us/library/aa363679(v=vs.85).aspx)
+Log.err (fun f -> f "This is an error");
+Log.info (fun f -> f "This is informational");
+Log.debug (fun f -> f "This is lowly debugging data");
+```
+
+Please read [the API documentation](https://djs55.github.io/ocaml-eventlog/index.html).
+
+For more context, please read the [MSDN ReportError example](https://msdn.microsoft.com/en-us/library/aa363680(v=vs.85).aspx).

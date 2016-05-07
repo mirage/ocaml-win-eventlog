@@ -44,7 +44,7 @@ Low-level example:
 You may wish to use the high-level Log reporter interface instead:
 {[
   let log = Eventlog.register "Mirage.exe" in
-  Logs.set_reporter (Log_eventlog.reporter h ());
+  Logs.set_reporter (Log_eventlog.reporter log ());
   Log.err (fun f -> f "This is an error");
   Log.info (fun f -> f "This is informational");
   Log.debug (fun f -> f "This is lowly debugging data");

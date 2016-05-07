@@ -1,0 +1,12 @@
+# OASIS_START
+# DO NOT EDIT (digest: 3e591ca16a241c6f9e641f6abab6c5d5)
+version = "0.1"
+description = "Binding to the Windows event log API"
+requires = "result logs unix"
+archive(byte) = "eventlog.cma"
+archive(byte, plugin) = "eventlog.cma"
+archive(native) = "eventlog.cmxa"
+archive(native, plugin) = "eventlog.cmxs"
+exists_if = "eventlog.cma"
+# OASIS_STOP
+

@@ -15,6 +15,12 @@
  *
  *)
 
+type handle
+
+external registerEventSource: string option -> string -> handle = "stub_register_event_source"
+
+let register ?server source = registerEventSource server source
+
 type severity = [
   | `Warning
   | `Success

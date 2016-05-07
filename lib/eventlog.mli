@@ -35,4 +35,12 @@ ReportEvent API documentation}
 }
 *)
 
+type handle
+(** An event log handle, see [register] *)
+
+val register: ?server:string -> string -> handle
+(** [register server source] registers the source named [source] with the
+    event log on server [server]. If [server] is None then the local event
+    log is used. *)
+
 val log_something: string -> unit

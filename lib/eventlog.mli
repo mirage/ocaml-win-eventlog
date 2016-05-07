@@ -15,7 +15,7 @@
  *
  *)
 
-(** Allow an application to log via the Windows event log
+(** Low-level functions to write to the Windows event log
 
 The Windows event log is similar to syslog on Unix systems. The main difference
 is that the log records "events" which have a "category", an "event id" and
@@ -54,11 +54,11 @@ You may wish to use the high-level Log reporter interface instead:
 For more context, please read the following documents:
 {ol
 {li
-{{https://msdn.microsoft.com/en-us/library/aa363679(v=vs.85).aspx}
+{{:https://msdn.microsoft.com/en-us/library/aa363679(v=vs.85).aspx}
 ReportEvent API documentation}
 }
 {li
-((https://support.microsoft.com/en-us/kb/166902)
+((:https://support.microsoft.com/en-us/kb/166902)
 HOWTO: Troubleshooting the "Event Message Not Found" message)
 }
 }

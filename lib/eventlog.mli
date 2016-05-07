@@ -58,8 +58,8 @@ For more context, please read the following documents:
 ReportEvent API documentation}
 }
 {li
-((:https://support.microsoft.com/en-us/kb/166902)
-HOWTO: Troubleshooting the "Event Message Not Found" message)
+{{:https://support.microsoft.com/en-us/kb/166902}
+HOWTO: Troubleshooting the "Event Message Not Found" message}
 }
 }
 *)

@@ -24,12 +24,14 @@ Document api
   XOCamlbuildLibraries: win-eventlog
 
 Executable            simple
+  Install:            false
   CompiledObject:     best
   Path:               examples
   MainIs:             simple.ml
   BuildDepends:       win-eventlog
 
 Executable            reporter
+  Install:            false
   CompiledObject:     best
   Path:               examples
   MainIs:             reporter.ml

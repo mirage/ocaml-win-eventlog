@@ -15,23 +15,39 @@
  *
  *)
 
-type severity = [
-  | `Warning
+type t
+
+external registerEventSource: string option -> string -> t = "stub_register_event_source"
+
+let register ?server source = registerEventSource server source
+
+type ty = [
   | `Success
-  | `Informational
+  | `Audit_failure
+  | `Audit_success
   | `Error
+  | `Information
+  | `Warning
 ]
 
-type c_severity =
-  | Success       (* = 00 *)
-  | Informational (* = 01 *)
-  | Warning       (* = 10 *)
-  | Error         (* = 11 *)
+(* https://msdn.microsoft.com/en-gb/library/windows/desktop/aa363679(v=vs.85).aspx *)
+let int_of_ty = function
+  | `Success       -> 0x0000
+  | `Audit_failure -> 0x0010
+  | `Audit_success -> 0x0008
+  | `Error         -> 0x0001
+  | `Information   -> 0x0004
+  | `Warning       -> 0x0002
 
-let c_severity_of = function
-  | `Warning -> Warning
-  | `Success -> Success
-  | `Informational -> Informational
-  | `Error -> Error
+let string_of_ty = function
+  | `Success       -> "EVENTLOG_SUCCESS"
+  | `Audit_failure -> "EVENTLOG_AUDIT_FAILURE"
+  | `Audit_success -> "EVENTLOG_AUDIT_SUCCESS"
+  | `Error         -> "EVENTLOG_ERROR_TYPE"
+  | `Information   -> "EVENTLOG_INFORMATION_TYPE"
+  | `Warning       -> "EVENTLOG_WARNING_TYPE"
 
-external log_something: string -> unit = "stub_log_something"
+external reportEvent: t -> int -> int -> int -> string array -> unit = "stub_report_event"
+
+let report t ty category event strings =
+  reportEvent t (int_of_ty ty) category event strings

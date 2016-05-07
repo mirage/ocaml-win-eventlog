@@ -1,12 +1,12 @@
 opam-version: "1.2"
-name: "eventlog"
+name: "win-eventlog"
 maintainer: "dave@recoil.org"
-version: "0.8"
+version: "0.1"
 authors: [ "David Scott" ]
 license: "ISC"
-homepage: "https://github.com/mirage/ocaml-eventlog"
-dev-repo: "https://github.com/mirage/ocaml-eventlog.git"
-bug-reports: "https://github.com/mirage/ocaml-eventlog/issues"
+homepage: "https://github.com/mirage/ocaml-win-eventlog"
+dev-repo: "https://github.com/mirage/ocaml-win-eventlog.git"
+bug-reports: "https://github.com/mirage/ocaml-win-eventlog/issues"
 
 build: [
   [make "PREFIX=%{prefix}%"]
@@ -14,7 +14,7 @@ build: [
 
 install: [make "PREFIX=%{prefix}%" "install"]
 
-remove: [["ocamlfind" "remove" "eventlog"]]
+remove: [["ocamlfind" "remove" "win-eventlog"]]
 
 depends: [
   "result"
@@ -23,5 +23,3 @@ depends: [
   "ocamlbuild" {build}
 ]
 build-doc: ["ocaml" "setup.ml" "-doc"]
-
-available: [ os = "win32" ]

@@ -1,5 +1,5 @@
 OASISFormat:  0.3
-Name:         eventlog
+Name:         win-eventlog
 Version:      0.1
 Synopsis:     Binding to the Windows event log API
 License:      ISC
@@ -8,29 +8,29 @@ Copyrights:   (C) 2016 Docker Inc
 BuildTools:   ocamlbuild
 Plugins:      DevFiles (0.3), META (0.3)
 
-Library               eventlog
+Library               "win-eventlog"
   Path:               lib
   Modules:            Eventlog, Log_eventlog
   BuildDepends:       result, logs, unix
-  Findlibname:        eventlog 
+  Findlibname:        eventlog
   CSources:           eventlog_stubs.c
 
-Document eventlog
-  Title:                Eventlog bindings
+Document api
+  Title:                Windows eventlog bindings
   Type:                 ocamlbuild (0.3)
   BuildTools+:          ocamldoc
   Install:              true
   XOCamlbuildPath:      lib
-  XOCamlbuildLibraries: eventlog
+  XOCamlbuildLibraries: win-eventlog
 
 Executable            simple
   CompiledObject:     best
   Path:               examples
   MainIs:             simple.ml
-  BuildDepends:       eventlog
+  BuildDepends:       win-eventlog
 
 Executable            reporter
   CompiledObject:     best
   Path:               examples
   MainIs:             reporter.ml
-  BuildDepends:       eventlog
+  BuildDepends:       win-eventlog

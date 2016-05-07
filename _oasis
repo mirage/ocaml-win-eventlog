@@ -1,6 +1,6 @@
 OASISFormat:  0.3
 Name:         eventlog
-Version:      0.8
+Version:      0.1
 Synopsis:     Binding to the Windows event log API
 License:      ISC
 Authors:      David Scott

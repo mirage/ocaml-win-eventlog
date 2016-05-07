@@ -12,7 +12,7 @@ Library               "win-eventlog"
   Path:               lib
   Modules:            Eventlog, Log_eventlog
   BuildDepends:       result, logs, unix
-  Findlibname:        eventlog
+  Findlibname:        win-eventlog
   CSources:           eventlog_stubs.c
 
 Document api

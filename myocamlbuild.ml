@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: 2f25e33bb5fd9a6616ec9f5fdd7c8338) *)
+(* DO NOT EDIT (digest: 58f6871b038208e9e4eb240385895eda) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -767,8 +767,8 @@ end
 open Ocamlbuild_plugin;;
 let package_default =
   {
-     MyOCamlbuildBase.lib_ocaml = [("eventlog", ["lib"], [])];
-     lib_c = [("eventlog", "lib", [])];
+     MyOCamlbuildBase.lib_ocaml = [("win-eventlog", ["lib"], [])];
+     lib_c = [("win-eventlog", "lib", [])];
      flags = [];
      includes = [("examples", ["lib"])]
   }

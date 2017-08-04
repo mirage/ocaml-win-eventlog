@@ -21,7 +21,7 @@ let ppf, flush =
   Format.formatter_of_buffer b, flush
 
 let reporter ~eventlog ?(category = 0) ?(event = 0) () =
-  let report src level ~over k msgf =
+  let report _src level ~over k msgf =
     let ty = match level with
       | Logs.App -> `Success
       | Logs.Error -> `Error
@@ -29,7 +29,7 @@ let reporter ~eventlog ?(category = 0) ?(event = 0) () =
       | Logs.Info -> `Information
       | Logs.Debug -> `Success in
     let k _ = Eventlog.report eventlog ty category event [| flush () |]; over (); k () in
-    msgf @@ fun ?header ?tags fmt ->
+    msgf @@ fun ?header ?tags:_ fmt ->
     match header with
     | None -> Format.kfprintf k ppf ("@[" ^^ fmt ^^ "@]@.")
     | Some h -> Format.kfprintf k ppf ("[%s] @[" ^^ fmt ^^ "@]@.") h in

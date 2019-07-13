@@ -3,10 +3,11 @@ maintainer: "dave@recoil.org"
 authors: "David Scott"
 license: "ISC"
 homepage: "https://github.com/mirage/ocaml-win-eventlog"
+doc: "https://mirage.github.io/ocaml-win-eventlog/"
 bug-reports: "https://github.com/mirage/ocaml-win-eventlog/issues"
 depends: [
   "ocaml"
-  "dune" {build & >= "1.0"}
+  "dune"
   "result"
   "logs"
 ]

@@ -29,7 +29,7 @@
 #define FALSE 0
 #warning "This isn't a Windows platform: there is no real eventlog support here"
 BOOL CloseHandle(HANDLE h){
-  fprintf(stderr, "CloseHandle %d\n", (int)h);
+  fprintf(stderr, "CloseHandle %lx\n", (unsigned long int)h);
   return TRUE;
 }
 #define LPCTSTR char*

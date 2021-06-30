@@ -66,6 +66,14 @@ BOOL ReportEvent(HANDLE hEventLog, WORD wType, WORD wCategory, DWORD dwEventID,
 #include <caml/threads.h>
 #include <caml/unixsupport.h>
 
+#if CAML_VERSION < 41200
+#define Val_none Val_int(0)
+#define Some_val(v) Field(v, 0)
+#define Tag_some 0
+#define Is_none(v) ((v) == Val_none)
+#define Is_some(v) Is_block(v)
+#endif
+
 #define Eventlog_val(v) (*((HANDLE *) Data_custom_val(v)))
 
 static void eventlog_finalize(value v) {
@@ -87,17 +95,14 @@ static value alloc_eventlog(HANDLE h) {
   return v;
 }
 
-#define Val_None 0
-#define Val_Some 1
-
 CAMLprim value stub_register_event_source(value server_opt, value source) {
   CAMLparam2(server_opt, source);
   LPCTSTR lpUNCServerName = NULL;
   LPCTSTR lpSourceName = NULL;
   DWORD error = 0;
   HANDLE h = NULL;
-  if (Int_val(server_opt) == Val_Some) {
-    lpUNCServerName = strdup(String_val(Field(server_opt, 1)));
+  if (Is_some(server_opt)) {
+    lpUNCServerName = strdup(String_val(Some_val(server_opt)));
   }
   lpSourceName = strdup(String_val(source));
 

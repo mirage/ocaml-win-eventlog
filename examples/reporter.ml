@@ -23,8 +23,8 @@ let src =
 module Log = (val Logs.src_log src : Logs.LOG)
 
 let _ =
-  let h = Eventlog.register "Mirage.exe" in
-  Logs.set_reporter (Log_eventlog.reporter h ());
+  let eventlog = Eventlog.register "Mirage.exe" in
+  Logs.set_reporter (Log_eventlog.reporter ~eventlog ());
   Log.err (fun f -> f "This is an error");
   Log.warn (fun f -> f "This is a warning");
   Log.info (fun f -> f "This is informational");

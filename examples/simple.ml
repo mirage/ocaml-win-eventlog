@@ -15,6 +15,8 @@
  *
  *)
 
+open Win_eventlog
+
 let _ =
   let h = Eventlog.register "Docker.exe" in
   List.iter (fun ty ->

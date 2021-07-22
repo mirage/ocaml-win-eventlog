@@ -5,4 +5,5 @@
  (foreign_stubs
   (language c)
   (names eventlog_stubs))
- (wrapped false))
+ (wrapped
+  (transition "The library is now wrapped")))

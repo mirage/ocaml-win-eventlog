@@ -15,6 +15,8 @@
  *
  *)
 
+open Win_eventlog
+
 let src =
    let src = Logs.Src.create "test" ~doc:"Test eventlog using the logs library" in
    Logs.Src.set_level src (Some Logs.Debug);

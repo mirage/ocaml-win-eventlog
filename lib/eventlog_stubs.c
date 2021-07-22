@@ -33,7 +33,7 @@ BOOL CloseHandle(HANDLE h){
   fprintf(stderr, "CloseHandle %lx\n", (unsigned long int)h);
   return TRUE;
 }
-#define LPCTSTR char*
+#define LPCTSTR const char*
 #define DWORD int
 DWORD GetLastError(){
   return 0;

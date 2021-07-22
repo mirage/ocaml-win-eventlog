@@ -21,6 +21,7 @@ doc: "https://mirage.github.io/ocaml-win-eventlog/"
 bug-reports: "https://github.com/mirage/ocaml-win-eventlog/issues"
 depends: [
   "dune" {>= "2.9"}
+  "ocaml" {>= "4.08"}
   "result"
   "logs"
   "base-unix"

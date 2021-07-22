@@ -24,6 +24,7 @@
 "\| ```
  )
  (depends
+  (ocaml (>= 4.08))
   result
   logs
   base-unix))

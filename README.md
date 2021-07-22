@@ -1,6 +1,8 @@
 Bindings to the Windows event log
 =================================
 
+[![Build status](https://github.com/mirage/ocaml-win-eventlog/actions/workflows/main.yml/badge.svg)](https://github.com/mirage/ocaml-win-eventlog/actions)
+
 This library allows you to log via the Windows event log from OCaml programs.
 
 A low-level example:

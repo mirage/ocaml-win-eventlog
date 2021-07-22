@@ -17,7 +17,7 @@
 
 (** Log reporter which sends logs to the Windows event log. *)
 
-val reporter: eventlog:Eventlog.t -> ?category:int -> ?event:int -> unit
-  -> Logs.reporter
+val reporter :
+  eventlog:Eventlog.t -> ?category:int -> ?event:int -> unit -> Logs.reporter
 (** Construct a {!Logs} reporter which sends logs to the Windows event log,
     optionally with the given category and event ids set. *)

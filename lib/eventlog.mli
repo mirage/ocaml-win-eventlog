@@ -67,24 +67,23 @@ HOWTO: Troubleshooting the "Event Message Not Found" message}
 type t
 (** An event log handle, see {!register}. *)
 
-val register: ?server:string -> string -> t
+val register : ?server:string -> string -> t
 (** [register server source] registers the source named [source] with the
     event log on server [server]. If [server] is [None] then the local event
     log is used. *)
 
-type ty = [
-  | `Success
+type ty =
+  [ `Success
   | `Audit_failure
   | `Audit_success
   | `Error
   | `Information
-  | `Warning
-]
+  | `Warning ]
 (** Type of event to be logged. *)
 
-val string_of_ty: ty -> string
+val string_of_ty : ty -> string
 
-val report: t -> ty -> int -> int -> string array -> unit
+val report : t -> ty -> int -> int -> string array -> unit
 (** [report t ty category event strings] reports an event to the log [t]. The
     event has a global "type", as well as source-specific category and event ids.
     Each event takes an array of "insertion strings" -- the system log viewer

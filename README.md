@@ -27,8 +27,6 @@ Log.info (fun f -> f "This is informational");
 Log.debug (fun f -> f "This is lowly debugging data");
 ```
 
-Please read [the API documentation](https://djs55.github.io/ocaml-win-eventlog/index.html).
-
 For more context, please read the [MSDN ReportError example](https://msdn.microsoft.com/en-us/library/aa363680(v=vs.85).aspx).
 
 Please note that this code will compile on non-Windows platforms, but this

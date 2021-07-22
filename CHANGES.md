@@ -1,3 +1,9 @@
+## unreleased
+
+- Wrap the library (@MisterDA)
+- Bunch of minor fixes (@MisterDA)
+- Switch to dune 2.9 and lower bound on OCaml 4.08 (@MisterDA)
+
 ## 0.3 (2019-07-12)
 
 - Upgrade to dune and opam 2.0 metadata format (@avsm)

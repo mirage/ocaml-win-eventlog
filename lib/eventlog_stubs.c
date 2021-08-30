@@ -87,12 +87,14 @@ static void eventlog_finalize(value v) {
 }
 
 static struct custom_operations eventlog_ops = {
-  "djs55.eventlog",
-  eventlog_finalize,
-  custom_compare_default,
-  custom_hash_default,
-  custom_serialize_default,
-  custom_deserialize_default
+  .identifier = "djs55.eventlog",
+  .finalize = eventlog_finalize,
+  .compare = custom_compare_default,
+  .hash = custom_hash_default,
+  .serialize = custom_serialize_default,
+  .deserialize = custom_deserialize_default,
+  .compare_ext = custom_compare_ext_default,
+  .fixed_length = NULL,
 };
 
 static value alloc_eventlog(HANDLE h) {

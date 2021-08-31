@@ -5,7 +5,7 @@
 
 (source (github mirage/ocaml-win-eventlog))
 (license ISC)
-(authors "David Scott")
+(authors "David Scott" "Antonin Décimo")
 (maintainers "dave@recoil.org")
 (documentation "https://mirage.github.io/ocaml-win-eventlog/")
 (package

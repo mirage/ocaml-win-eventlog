@@ -87,7 +87,7 @@ static void eventlog_finalize(value v) {
 }
 
 static struct custom_operations eventlog_ops = {
-  .identifier = "djs55.eventlog",
+  .identifier = "mirage.eventlog",
   .finalize = eventlog_finalize,
   .compare = custom_compare_default,
   .hash = custom_hash_default,

@@ -1,4 +1,4 @@
-## unreleased
+## 0.4 (2021-08-31)
 
 - Wrap the library (@MisterDA)
 - Bunch of minor fixes (@MisterDA)

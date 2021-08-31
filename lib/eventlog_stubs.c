@@ -17,6 +17,9 @@
 #include <string.h>
 
 #ifdef WIN32
+#define UNICODE
+#define _UNICODE
+#define WIN32_LEAN_AND_MEAN
 #include <winsock2.h>
 #include <windows.h>
 #else
@@ -27,10 +30,10 @@
 #define FALSE 0
 #warning "This isn't a Windows platform: there is no real eventlog support here"
 BOOL CloseHandle(HANDLE h){
-  fprintf(stderr, "CloseHandle %d\n", (int)h);
+  fprintf(stderr, "CloseHandle %lx\n", (unsigned long int)h);
   return TRUE;
 }
-#define LPCTSTR char*
+#define LPCTSTR const char*
 #define DWORD int
 DWORD GetLastError(){
   return 0;
@@ -58,6 +61,8 @@ BOOL ReportEvent(HANDLE hEventLog, WORD wType, WORD wCategory, DWORD dwEventID,
 }
 #endif
 
+#define CAML_NAME_SPACE
+#define CAML_INTERNALS
 #include <caml/mlvalues.h>
 #include <caml/memory.h>
 #include <caml/alloc.h>
@@ -65,6 +70,15 @@ BOOL ReportEvent(HANDLE hEventLog, WORD wType, WORD wCategory, DWORD dwEventID,
 #include <caml/fail.h>
 #include <caml/threads.h>
 #include <caml/unixsupport.h>
+#include <caml/osdeps.h>
+
+#if CAML_VERSION < 41200
+#define Val_none Val_int(0)
+#define Some_val(v) Field(v, 0)
+#define Tag_some 0
+#define Is_none(v) ((v) == Val_none)
+#define Is_some(v) Is_block(v)
+#endif
 
 #define Eventlog_val(v) (*((HANDLE *) Data_custom_val(v)))
 
@@ -73,33 +87,32 @@ static void eventlog_finalize(value v) {
 }
 
 static struct custom_operations eventlog_ops = {
-  "djs55.eventlog",
-  eventlog_finalize,
-  custom_compare_default,
-  custom_hash_default,
-  custom_serialize_default,
-  custom_deserialize_default
+  .identifier = "djs55.eventlog",
+  .finalize = eventlog_finalize,
+  .compare = custom_compare_default,
+  .hash = custom_hash_default,
+  .serialize = custom_serialize_default,
+  .deserialize = custom_deserialize_default,
+  .compare_ext = custom_compare_ext_default,
+  .fixed_length = NULL,
 };
 
 static value alloc_eventlog(HANDLE h) {
-  value v = alloc_custom(&eventlog_ops, sizeof(HANDLE), 0, 1);
+  value v = caml_alloc_custom(&eventlog_ops, sizeof(HANDLE), 0, 1);
   Eventlog_val(v) = h;
   return v;
 }
 
-#define Val_None 0
-#define Val_Some 1
-
 CAMLprim value stub_register_event_source(value server_opt, value source) {
   CAMLparam2(server_opt, source);
-  LPCTSTR lpUNCServerName = NULL;
-  LPCTSTR lpSourceName = NULL;
+  char_os *lpUNCServerName = NULL;
+  char_os *lpSourceName = NULL;
   DWORD error = 0;
   HANDLE h = NULL;
-  if (Int_val(server_opt) == Val_Some) {
-    lpUNCServerName = strdup(String_val(Field(server_opt, 1)));
+  if (Is_some(server_opt)) {
+    lpUNCServerName = caml_stat_strdup_to_os(String_val(Some_val(server_opt)));
   }
-  lpSourceName = strdup(String_val(source));
+  lpSourceName = caml_stat_strdup_to_os(String_val(source));
 
   caml_release_runtime_system();
   h = RegisterEventSource(lpUNCServerName, lpSourceName);
@@ -108,8 +121,8 @@ CAMLprim value stub_register_event_source(value server_opt, value source) {
   }
   caml_acquire_runtime_system();
 
-  free((void*)lpUNCServerName);
-  free((void*)lpSourceName);
+  caml_stat_free(lpUNCServerName);
+  caml_stat_free(lpSourceName);
   if (h == NULL) {
     win32_maperr(error);
     uerror("RegisterEventSource", Nothing);
@@ -124,15 +137,15 @@ CAMLprim value stub_report_event(value eventlog, value type, value category, val
   WORD wCategory = Int_val(category);
   DWORD dwEventID = Int_val(event);
   WORD wNumStrings = Wosize_val(strings);
-  LPCTSTR *lpStrings = malloc(wNumStrings * sizeof(char *));
+  char_os **lpStrings = malloc(wNumStrings * sizeof(char *));
   int i = 0;
   for (i = 0; i < wNumStrings; i++){
-    lpStrings[i] = strdup(String_val(Field(strings, i)));
+    lpStrings[i] = caml_stat_strdup_to_os(String_val(Field(strings, i)));
   }
 
   caml_release_runtime_system();
   BOOL result = ReportEvent(hEventLog, wType, wCategory, dwEventID, NULL,
-    wNumStrings, 0, lpStrings, NULL);
+    wNumStrings, 0, (const char_os **)lpStrings, NULL);
   DWORD error = 0;
   if (!result){
     error = GetLastError();
@@ -140,7 +153,7 @@ CAMLprim value stub_report_event(value eventlog, value type, value category, val
   caml_acquire_runtime_system();
 
   for (i = 0; i < wNumStrings; i++){
-    free((void*)(lpStrings[i]));
+    caml_stat_free(lpStrings[i]);
   }
   free((void*)lpStrings);
   if (!result) {

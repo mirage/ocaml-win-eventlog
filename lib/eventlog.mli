@@ -15,7 +15,7 @@
  *
  *)
 
-(** Low-level functions to write to the Windows event log
+(** Low-level functions to write to the Windows event log.
 
 The Windows event log is similar to syslog on Unix systems. The main difference
 is that the log records "events" which have a "category", an "event id" and
@@ -38,10 +38,10 @@ Low-level example:
   Eventlog.report log `Success category event [|
     "insertion string 1";
     "insertion string 2";
-  |]`
+  |]
 ]}
 
-You may wish to use the high-level Log reporter interface instead:
+You may wish to use the high-level {!Log} reporter interface instead:
 {[
   let log = Eventlog.register "Mirage.exe" in
   Logs.set_reporter (Log_eventlog.reporter log ());
@@ -65,26 +65,25 @@ HOWTO: Troubleshooting the "Event Message Not Found" message}
 *)
 
 type t
-(** An event log handle, see [register] *)
+(** An event log handle, see {!register}. *)
 
-val register: ?server:string -> string -> t
+val register : ?server:string -> string -> t
 (** [register server source] registers the source named [source] with the
-    event log on server [server]. If [server] is None then the local event
+    event log on server [server]. If [server] is [None] then the local event
     log is used. *)
 
-type ty = [
-  | `Success
+type ty =
+  [ `Success
   | `Audit_failure
   | `Audit_success
   | `Error
   | `Information
-  | `Warning
-]
-(** Type of event to be logged *)
+  | `Warning ]
+(** Type of event to be logged. *)
 
-val string_of_ty: ty -> string
+val string_of_ty : ty -> string
 
-val report: t -> ty -> int -> int -> string array -> unit
+val report : t -> ty -> int -> int -> string array -> unit
 (** [report t ty category event strings] reports an event to the log [t]. The
     event has a global "type", as well as source-specific category and event ids.
     Each event takes an array of "insertion strings" -- the system log viewer

@@ -17,20 +17,31 @@
 
 let ppf, flush =
   let b = Buffer.create 255 in
-  let flush () = let s = Buffer.contents b in Buffer.clear b; s in
-  Format.formatter_of_buffer b, flush
+  let flush () =
+    let s = Buffer.contents b in
+    Buffer.clear b;
+    s
+  in
+  (Format.formatter_of_buffer b, flush)
 
 let reporter ~eventlog ?(category = 0) ?(event = 0) () =
   let report _src level ~over k msgf =
-    let ty = match level with
+    let ty =
+      match level with
       | Logs.App -> `Success
       | Logs.Error -> `Error
       | Logs.Warning -> `Warning
       | Logs.Info -> `Information
-      | Logs.Debug -> `Success in
-    let k _ = Eventlog.report eventlog ty category event [| flush () |]; over (); k () in
+      | Logs.Debug -> `Success
+    in
+    let k _ =
+      Eventlog.report eventlog ty category event [| flush () |];
+      over ();
+      k ()
+    in
     msgf @@ fun ?header ?tags:_ fmt ->
     match header with
     | None -> Format.kfprintf k ppf ("@[" ^^ fmt ^^ "@]@.")
-    | Some h -> Format.kfprintf k ppf ("[%s] @[" ^^ fmt ^^ "@]@.") h in
- { Logs.report }
+    | Some h -> Format.kfprintf k ppf ("[%s] @[" ^^ fmt ^^ "@]@.") h
+  in
+  { Logs.report }

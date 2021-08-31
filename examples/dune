@@ -1,4 +1,4 @@
 (executables
  (names simple reporter)
- (libraries eventlog)
+ (libraries win-eventlog)
  (preprocess no_preprocessing))
